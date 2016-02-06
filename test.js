@@ -23,12 +23,12 @@ describe('FileVault', () => {
             assert.deepStrictEqual(vault.parseOptions('export', {
                 verbose: true,
                 prune: true,
-                type: 'package',
+                type: 'platform',
                 uri: 'http://localhost:4502/crx',
                 jcrPath: '.',
                 localPath: '/'
             }), [
-                '--type package',
+                '--type platform',
                 '--credentials admin:admin',
                 '--prune-missing',
                 '--verbose',

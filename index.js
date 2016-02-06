@@ -110,7 +110,8 @@ class FileVault {
      */
     exec(command, options) {
         return (new Promise((resolve, reject) => {
-            this.cp.exec('vlt', [command].concat(this.parseOptions(command, options)), (error, stdout, stderr) => {
+            let cmd = ['vlt', command].concat(this.parseOptions(command, options)).join(' ');
+            this.cp.exec(cmd, (error, stdout, stderr) => {
                 return error !== null ? reject(stderr, error) : resolve(stdout);
             });
         }));
