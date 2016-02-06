@@ -19,50 +19,33 @@ describe('FileVault', () => {
     });
 
     describe('export()', () => {
-        it('should execute export command', () => {
-            assert.deepStrictEqual(vault.parseOptions('export', {
+        it('should execute export command with correct arguments', () => {
+            assert.equal(vault.parseOptions('export', {
                 verbose: true,
                 prune: true,
                 type: 'platform',
                 uri: 'http://localhost:4502/crx',
                 jcrPath: '.',
                 localPath: '/'
-            }), [
-                '--type platform',
-                '--credentials admin:admin',
-                '--prune-missing',
-                '--verbose',
-                '--version',
-                'http://localhost:4502/crx',
-                '.',
-                '/'
-            ]);
+            }), 'vlt export --type platform --credentials admin:admin --prune-missing --verbose --version http://localhost:4502/crx . /');
         });
     });
 
     describe('import()', () => {
-        it('should execute import command', () => {
-            assert.deepStrictEqual(vault.parseOptions('import', {
+        it('should execute import command with correct arguments', () => {
+            assert.equal(vault.parseOptions('import', {
                 verbose: true,
                 sync: true,
                 uri: 'http://localhost:4502/crx',
                 jcrPath: '.',
                 localPath: '/'
-            }), [
-                '--credentials admin:admin',
-                '--sync',
-                '--verbose',
-                '--version',
-                'http://localhost:4502/crx',
-                '.',
-                '/'
-            ]);
+            }), 'vlt import --credentials admin:admin --sync --verbose --version http://localhost:4502/crx . /');
         });
     });
 
     describe('checkout()', () => {
-        it('should execute checkout command', () => {
-            assert.deepStrictEqual(vault.parseOptions('checkout', {
+        it('should execute checkout command with correct arguments', () => {
+            assert.equal(vault.parseOptions('checkout', {
                 verbose: true,
                 quite: false,
                 force: true,
@@ -70,52 +53,188 @@ describe('FileVault', () => {
                 uri: 'http://localhost:4502/crx',
                 jcrPath: '.',
                 localPath: '/'
-            }), [
-                '--credentials admin:admin',
-                '--filter /app/test.js',
-                '--force',
-                '--verbose',
-                '--version',
-                'http://localhost:4502/crx',
-                '.',
-                '/'
-            ]);
+            }), 'vlt checkout --credentials admin:admin --filter /app/test.js --force --verbose --version http://localhost:4502/crx . /');
         });
     });
 
     describe('analyze()', () => {
-        it('should execute analyze command', () => {
-            assert.deepStrictEqual(vault.parseOptions('analyze', {
+        it('should execute analyze command with correct arguments', () => {
+            assert.equal(vault.parseOptions('analyze', {
                 verbose: true,
                 quite: false,
                 linkFormat: 'CQ520_HF_%s|%s',
                 localPath: '/'
-            }), [
-                '--credentials admin:admin',
-                '--linkFormat CQ520_HF_%s|%s',
-                '--verbose',
-                '--version',
-                '/'
-            ]);
+            }), 'vlt analyze --credentials admin:admin --linkFormat CQ520_HF_%s|%s --verbose --version /');
         });
     });
 
     describe('status()', () => {
-        it('should execute status command', () => {
-            assert.deepStrictEqual(vault.parseOptions('status', {
+        it('should execute status command with correct arguments', () => {
+            assert.equal(vault.parseOptions('status', {
                 verbose: true,
                 quite: false,
                 showUpdate: true,
                 nonRecursive: true,
                 file: '/test.js'
-            }), [
-                '--credentials admin:admin',
-                '--non-recursive',
-                '--show-update',
-                '--verbose',
-                '--version',
-                '/test.js'
-            ]);
+            }), 'vlt status --credentials admin:admin --non-recursive --show-update --verbose --version /test.js');
+        });
+    });
+
+    describe('update()', () => {
+        it('should execute update command with correct arguments', () => {
+            assert.equal(vault.parseOptions('update', {
+                verbose: true,
+                quite: false,
+                force: true,
+                nonRecursive: true,
+                file: ['/test.js']
+            }), 'vlt update --credentials admin:admin --non-recursive --force --verbose --version /test.js');
+        });
+    });
+
+    describe('info()', () => {
+        it('should execute info command with correct arguments', () => {
+            assert.equal(vault.parseOptions('info', {
+                verbose: true,
+                quite: false,
+                force: true,
+                recursive: true,
+                file: ['/test.js']
+            }), 'vlt info --credentials admin:admin --recursive --force --verbose --version /test.js');
+        });
+    });
+
+    describe('commit()', () => {
+        it('should execute commit command with correct arguments', () => {
+            assert.equal(vault.parseOptions('commit', {
+                verbose: true,
+                quite: false,
+                force: true,
+                nonRecursive: true,
+                file: ['/test.js']
+            }), 'vlt commit --credentials admin:admin --non-recursive --force --verbose --version /test.js');
+        });
+    });
+
+    describe('revert()', () => {
+        it('should execute revert command with correct arguments', () => {
+            assert.equal(vault.parseOptions('revert', {
+                quite: false,
+                recursive: true,
+                file: ['/test.js']
+            }), 'vlt revert --credentials admin:admin --recursive --verbose --version /test.js');
+        });
+    });
+
+    describe('resolved()', () => {
+        it('should execute resolved command with correct arguments', () => {
+            assert.equal(vault.parseOptions('resolved', {
+                quite: false,
+                force: true,
+                recursive: true,
+                file: ['/test.js']
+            }), 'vlt resolved --credentials admin:admin --recursive --force --verbose --version /test.js');
+        });
+    });
+
+    describe('propget()', () => {
+        it('should execute propget command with correct arguments', () => {
+            assert.equal(vault.parseOptions('propget', {
+                quite: false,
+                recursive: true,
+                propname: 'name',
+                file: ['/test.js']
+            }), 'vlt propget --credentials admin:admin --recursive --verbose --version name /test.js');
+        });
+    });
+
+    describe('proplist()', () => {
+        it('should execute proplist command with correct arguments', () => {
+            assert.equal(vault.parseOptions('proplist', {
+                quite: false,
+                recursive: true,
+                file: ['/test.js']
+            }), 'vlt proplist --credentials admin:admin --recursive --verbose --version /test.js');
+        });
+    });
+
+    describe('propset()', () => {
+        it('should execute propset command with correct arguments', () => {
+            assert.equal(vault.parseOptions('propset', {
+                quite: false,
+                recursive: true,
+                propname: 'name',
+                propval: 'test',
+                file: ['/test.js']
+            }), 'vlt propset --credentials admin:admin --recursive --verbose --version name test /test.js');
+        });
+    });
+
+    describe('add()', () => {
+        it('should execute add command with correct arguments', () => {
+            assert.equal(vault.parseOptions('add', {
+                verbose: true,
+                quite: false,
+                force: true,
+                nonRecursive: true,
+                file: ['/test.js']
+            }), 'vlt add --credentials admin:admin --non-recursive --force --verbose --version /test.js');
+        });
+    });
+
+    describe('delete()', () => {
+        it('should execute delete command with correct arguments', () => {
+            assert.equal(vault.parseOptions('delete', {
+                verbose: true,
+                quite: false,
+                force: true,
+                file: ['/test.js']
+            }), 'vlt delete --credentials admin:admin --force --verbose --version /test.js');
+        });
+    });
+
+    describe('diff()', () => {
+        it('should execute diff command with correct arguments', () => {
+            assert.equal(vault.parseOptions('diff', {
+                nonRecursive: true,
+                file: ['/test.js']
+            }), 'vlt diff --credentials admin:admin --non-recursive --verbose --version /test.js');
+        });
+    });
+
+    describe('console()', () => {
+        it('should execute console command with correct arguments', () => {
+            assert.equal(vault.parseOptions('console', {
+                settings: '/test.js'
+            }), 'vlt console --credentials admin:admin --console-settings /test.js --verbose --version');
+        });
+    });
+
+    describe('rcp()', () => {
+        it('should execute rcp command with correct arguments', () => {
+            assert.equal(vault.parseOptions('rcp', {
+                quite: false,
+                recursive: true,
+                batchSize: 100,
+                throttle: 1,
+                update: true,
+                newer: true,
+                exclude: 'css',
+                src: 'http://localhost:4502/crx/-/jcr:root/content',
+                dst: 'http://admin:admin@localhost:4503/crx/-/jcr:root/content_copy'
+            }), 'vlt rcp --credentials admin:admin --batchSize 100 --throttle 1 --exclude css --recursive --newer --update --verbose --version http://localhost:4502/crx/-/jcr:root/content http://admin:admin@localhost:4503/crx/-/jcr:root/content_copy');
+        });
+    });
+
+    describe('sync()', () => {
+        it('should execute sync command with correct arguments', () => {
+            assert.equal(vault.parseOptions('sync', {
+                verbose: true,
+                force: true,
+                uri: 'http://localhost:4502',
+                command: 'install',
+                localPath: '/'
+            }), 'vlt sync --credentials admin:admin --uri http://localhost:4502 --force --verbose --version install /');
         });
     });
 });

@@ -7,7 +7,8 @@
     "prepublish": "./node_modules/.bin/jsdoc -c ./conf.json -t ./node_modules/ink-docstrap/template -R README.md -r ./index.js",
     "lint": "eslint index.js test.js",
     "pretest": "npm run lint",
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "coveralls": "istanbul cover _mocha --report html -- -R spec"
   },
   "keywords": [
     "VLT",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "eslint": "^1.10.3",
     "ink-docstrap": "^1.1.1",
+    "istanbul": "^0.4.2",
     "jsdoc": "^3.4.0",
     "mocha": "^2.4.5"
   }

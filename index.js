@@ -37,10 +37,10 @@ class FileVault {
      * @private
      * @param {string} command - vlt command name.
      * @param {object} options - command arguments parameter.
-     * @return {object} parameters.
+     * @return {string} parameters.
      */
     parseOptions(cmd, opts) {
-        let params = [];
+        let params = ['vlt', cmd];
         let options = Object.assign({}, this.options, opts);
 
         if (options.Xjcrlog) params.push('-Xjcrlog ' + options.Xjcrlog);
@@ -58,12 +58,12 @@ class FileVault {
 
         if (options.filter) params.push('--filter ' + options.filter);
         if (options.linkFormat) params.push('--linkFormat ' + options.linkFormat);
-        if (options.console) params.push('--console-settings ' + options.console);
+        if (options.settings) params.push('--console-settings ' + options.settings);
         if (options.batchSize) params.push('--batchSize ' + options.batchSize);
         if (options.throttle) params.push('--throttle ' + options.throttle);
         if (cmd === 'sync' && options.uri) params.push('--uri ' + options.uri);
         if (options.exclude) {
-            params.push('--exclude ' + Array.isArray(options.exclude) ? options.exclude.join(' ') : options.exclude);
+            params.push('--exclude ' + (Array.isArray(options.exclude) ? options.exclude.join(' ') : options.exclude));
         }
 
         if (options.recursive) params.push('--recursive');
@@ -95,7 +95,7 @@ class FileVault {
             params.push(Array.isArray(options.file) ? options.file.join(' ') : options.file);
         }
 
-        return params;
+        return params.join(' ');
     }
 
     /**
@@ -110,8 +110,7 @@ class FileVault {
      */
     exec(command, options) {
         return (new Promise((resolve, reject) => {
-            let cmd = ['vlt', command].concat(this.parseOptions(command, options)).join(' ');
-            this.cp.exec(cmd, (error, stdout, stderr) => {
+            this.cp.exec(this.parseOptions(command, options), (error, stdout, stderr) => {
                 return error !== null ? reject(stderr, error) : resolve(stdout);
             });
         }));
@@ -395,7 +394,7 @@ class FileVault {
      * @summary Runs an interactive console.
      * @method
      * @param {object} options - command arguments parameter.
-     * @param {boolean} options.console - specifies the console settings file. The default file is console.properties.
+     * @param {string} options.settings - specifies the console settings file. The default file is console.properties.
      * @return {Promise} A Promise object.
      */
     console(options) {
