@@ -1,0 +1,36 @@
+{
+  "name": "filevault",
+  "version": "1.0.0",
+  "description": "Apache Jackrabbit FileVault/Adobe CQ VLT node integration",
+  "main": "index.js",
+  "preferGlobal": true,
+  "scripts": {
+    "lint": "eslint index.js test.js",
+    "pretest": "npm run lint",
+    "test": "mocha --reporter spec"
+  },
+  "keywords": [
+    "VLT",
+    "FileVault",
+    "CQ5",
+    "JCR",
+    "repository",
+    "to",
+    "filesystem",
+    "mapping"
+  ],
+  "author": {
+    "name": "Nisheeth Kashyap",
+    "email": "nisheeth.k.kashyap@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nkashyap/filevault.git"
+  },
+  "license": "ISC",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "mocha": "^2.4.5"
+  }
+}
