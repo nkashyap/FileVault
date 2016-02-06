@@ -43,27 +43,27 @@ class FileVault {
         let params = ['vlt', cmd];
         let options = Object.assign({}, this.options, opts);
 
-        if (options.Xjcrlog) params.push('-Xjcrlog ' + options.Xjcrlog);
-        if (options.Xdavex) params.push('-Xdavex ' + options.Xdavex);
-        if (options.config) params.push('--config ' + options.config);
-        if (options.logLevel) params.push('--log-level ' + options.logLevel);
-        if (options.type) params.push('--type ' + options.type);
+        if (options.Xjcrlog) params.push(`-Xjcrlog ${options.Xjcrlog}`);
+        if (options.Xdavex) params.push(`-Xdavex ${options.Xdavex}`);
+        if (options.config) params.push(`--config ${options.config}`);
+        if (options.logLevel) params.push(`--log-level ${options.logLevel}`);
+        if (options.type) params.push(`--type ${options.type}`);
         if (options.credentials) {
-            params.push('--credentials ' + options.credentials);
+            params.push(`--credentials ${options.credentials}`);
         } else if (options.username && options.password) {
-            params.push('--credentials ' + options.username + ':' + options.password);
+            params.push(`--credentials ${options.username}:${options.password}`);
         } else {
             throw new Error('Please provide credentials.');
         }
 
-        if (options.filter) params.push('--filter ' + options.filter);
-        if (options.linkFormat) params.push('--linkFormat ' + options.linkFormat);
-        if (options.settings) params.push('--console-settings ' + options.settings);
-        if (options.batchSize) params.push('--batchSize ' + options.batchSize);
-        if (options.throttle) params.push('--throttle ' + options.throttle);
-        if (cmd === 'sync' && options.uri) params.push('--uri ' + options.uri);
+        if (options.filter) params.push(`--filter ${options.filter}`);
+        if (options.linkFormat) params.push(`--linkFormat ${options.linkFormat}`);
+        if (options.settings) params.push(`--console-settings ${options.settings}`);
+        if (options.batchSize) params.push(`--batchSize ${options.batchSize}`);
+        if (options.throttle) params.push(`--throttle ${options.throttle}`);
+        if (cmd === 'sync' && options.uri) params.push(`--uri ${options.uri}`);
         if (options.exclude) {
-            params.push('--exclude ' + (Array.isArray(options.exclude) ? options.exclude.join(' ') : options.exclude));
+            params.push(`--exclude ${(Array.isArray(options.exclude) ? options.exclude.join(' ') : options.exclude)}`);
         }
 
         if (options.recursive) params.push('--recursive');
