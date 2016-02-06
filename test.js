@@ -8,7 +8,7 @@ const assert = require('assert');
 require('mocha');
 
 describe('FileVault', () => {
-    var vault;
+    let vault;
     before(() => {
         vault = new FileVault({
             verbose: true,

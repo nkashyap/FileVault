@@ -1,0 +1,13 @@
+{
+  "templates":{
+    "systemName":"FileVault",
+    "includeDate":"true",
+    "navType":"vertical",
+    "theme":"united",
+    "linenums":"true",
+    "collapseSymbols":"true",
+    "inverseNav":"true",
+    "outputSourceFiles":"true",
+    "outputSourcePath":"true"
+  }
+}

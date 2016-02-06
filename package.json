@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Apache Jackrabbit FileVault/Adobe CQ VLT node integration",
   "main": "index.js",
-  "preferGlobal": true,
   "scripts": {
+    "prepublish": "./node_modules/.bin/jsdoc -c ./conf.json -t ./node_modules/ink-docstrap/template -R README.md -r ./index.js",
     "lint": "eslint index.js test.js",
     "pretest": "npm run lint",
     "test": "mocha --reporter spec"
@@ -25,12 +25,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/nkashyap/filevault.git"
+    "url": "git://github.com/nkashyap/FileVault.git"
   },
   "license": "ISC",
   "readmeFilename": "README.md",
   "devDependencies": {
     "eslint": "^1.10.3",
+    "ink-docstrap": "^1.1.1",
+    "jsdoc": "^3.4.0",
     "mocha": "^2.4.5"
   }
 }

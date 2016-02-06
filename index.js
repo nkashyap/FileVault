@@ -3,37 +3,42 @@
  * Created by Nisheeth on 06/02/2016.
  */
 
-const exec = require('child_process').exec;
-
 /**
  * Create a new FileVault
  * @class
- *
+ * @name FileVault
  * @see {@link http://jackrabbit.apache.org/filevault/overview.html}
  * @see {@link https://docs.adobe.com/docs/en/crx/2-3/how_to/how_to_use_the_vlttool.html}
+ *
+ * @param {object} options - command arguments parameter.
+ * @param {boolean} options.verbose - verbose output.
+ * @param {boolean} options.quiet - prints as little as possible.
+ * @param {boolean} options.version - Prints the version information and exits VLT
+ * @param {string} options.Xjcrlog - Extended JcrLog options
+ * @param {string} options.Xdavex - Extended JCR remoting options
+ * @param {string} options.config - The JcrFs config to use
+ * @param {string} options.logLevel - Indicates the log level, for example, the log4j log level.
+ * @param {string} options.credentials - The default credentials to use
+ * @param {string} options.username - username.
+ * @param {string} options.password - password.
  */
 class FileVault {
 
-    /**
-     *
-     * @constructs
-     *
-     * @param {object} options - command arguments parameter.
-     * @param {boolean} options.verbose - verbose output.
-     * @param {boolean} options.quiet - prints as little as possible.
-     * @param {boolean} options.version - Prints the version information and exits VLT
-     * @param {string} options.Xjcrlog - Extended JcrLog options
-     * @param {string} options.Xdavex - Extended JCR remoting options
-     * @param {string} options.config - The JcrFs config to use
-     * @param {string} options.logLevel - Indicates the log level, for example, the log4j log level.
-     * @param {string} options.credentials - The default credentials to use
-     * @param {string} options.username - username.
-     * @param {string} options.password - password.
-     */
     constructor(options) {
-        this.options = options;
+        this.cp = require('child_process');
+        this.options = options || {};
     }
 
+    /**
+     * Parse options
+     *
+     * @summary Parse options
+     * @method
+     * @private
+     * @param {string} command - vlt command name.
+     * @param {object} options - command arguments parameter.
+     * @return {object} parameters.
+     */
     parseOptions(cmd, opts) {
         let params = [];
         let options = Object.assign({}, this.options, opts);
@@ -47,6 +52,8 @@ class FileVault {
             params.push('--credentials ' + options.credentials);
         } else if (options.username && options.password) {
             params.push('--credentials ' + options.username + ':' + options.password);
+        } else {
+            throw new Error('Please provide credentials.');
         }
 
         if (options.filter) params.push('--filter ' + options.filter);
@@ -95,13 +102,15 @@ class FileVault {
      * Execute vlt command
      *
      * @summary Execute vlt command
+     * @method
+     * @private
      * @param {string} command - vlt command name.
      * @param {object} options - command arguments parameter.
      * @return {Promise} A Promise object.
      */
     exec(command, options) {
         return (new Promise((resolve, reject) => {
-            exec('vlt', [command].concat(this.parseOptions(command, options)), (error, stdout, stderr) => {
+            this.cp.exec('vlt', [command].concat(this.parseOptions(command, options)), (error, stdout, stderr) => {
                 return error !== null ? reject(stderr, error) : resolve(stdout);
             });
         }));
@@ -112,6 +121,7 @@ class FileVault {
      *
      * @summary Exports the Vault filesystem mounted at <uri> to the local filesystem at <local-path>.
      *      An optional <jcr-path> can be specified in order to export just a sub-tree.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {boolean} options.prune - specifies if missing local files should be deleted.
@@ -131,6 +141,7 @@ class FileVault {
      * @summary Imports the local file system (starting at <local-path> to the vault file system at <uri>.
      *  You can specify a <jcr-path>as import root.
      *  If --sync is specified, the imported files are automatically put under vault control.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {string} options.sync - puts the local files under vault control.
@@ -150,6 +161,7 @@ class FileVault {
      * @summary Performs an initial check out from a JCR repository to the local filesystem starting at <uri> to the local filesystem at <local-path>.
      * You can also add a <jcrPath> argument to check out a sub-directory of the remote tree.
      * Workspace filters can be specified that are copied into the META-INF directory.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {boolean} options.force - forces checkout to overwrite local files if they already exist.
@@ -168,6 +180,7 @@ class FileVault {
      * Analyzes packages.
      *
      * @summary Analyzes packages.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {boolean} options.quiet - prints as little as possible.
@@ -185,6 +198,7 @@ class FileVault {
      * @summary Prints the status of working copy files and directories.
      *  If --show-update is specified, each file is checked against the remote version.
      *  The second letter then specifies what action would be performed by an update operation.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {boolean} options.quiet - prints as little as possible.
@@ -201,6 +215,7 @@ class FileVault {
      * Imports changes from the repository into the working copy.
      *
      * @summary Copies changes from the repository into the working copy.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {boolean} options.quiet - prints as little as possible.
@@ -217,6 +232,7 @@ class FileVault {
      * Displays information about a local file.
      *
      * @summary Displays information about a local file.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {boolean} options.quiet - prints as little as possible.
@@ -232,6 +248,7 @@ class FileVault {
      * Sends changes from your working copy to the repository.
      *
      * @summary Sends changes from your working copy to the repository.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {boolean} options.quiet - prints as little as possible.
@@ -248,6 +265,7 @@ class FileVault {
      * Restores the working copy file to its original state and undoes most local edits.
      *
      * @summary Restores the working copy file to its original state and undoes most local edits.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.quiet - prints as little as possible.
      * @param {boolean} options.recursive - descends recursively
@@ -262,6 +280,7 @@ class FileVault {
      * Removes conflicted state on working copy files or directories.
      *
      * @summary Removes conflicted state on working copy files or directories.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.force - resolves, even if there are conflict markers
      * @param {boolean} options.quiet - prints as little as possible
@@ -277,6 +296,7 @@ class FileVault {
      * Prints the value of a property on files or directories.
      *
      * @summary Prints the value of a property on files or directories.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.quiet - prints as little as possible
      * @param {boolean} options.recursive - descends recursively
@@ -292,6 +312,7 @@ class FileVault {
      * Prints the properties on files or directories.
      *
      * @summary Prints the properties on files or directories.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.quiet - prints as little as possible
      * @param {boolean} options.recursive - descends recursively
@@ -306,6 +327,7 @@ class FileVault {
      * Sets the value of a property on files or directories.
      *
      * @summary Sets the value of a property on files or directories.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.quiet - prints as little as possible
      * @param {boolean} options.recursive - descends recursively
@@ -322,7 +344,8 @@ class FileVault {
      * Puts files and directories under version control.
      *
      * @summary Puts files and directories under version control, scheduling them for addition to repository.
-     * They will be added on next commit.
+     *      They will be added on next commit.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {boolean} options.force - forces the operation to run
@@ -339,6 +362,7 @@ class FileVault {
      * Removes files and directories from version control.
      *
      * @summary Removes files and directories from version control.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {boolean} options.force - forces the operation to run
@@ -354,6 +378,7 @@ class FileVault {
      * Displays the differences between two paths.
      *
      * @summary Displays the differences between two paths.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.nonRecursive - operates on a single directory
      * @param {array} options.file - local file or directory to add
@@ -367,6 +392,7 @@ class FileVault {
      * Runs an interactive console.
      *
      * @summary Runs an interactive console.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.console - specifies the console settings file. The default file is console.properties.
      * @return {Promise} A Promise object.
@@ -381,6 +407,7 @@ class FileVault {
      * @summary Copies a node tree from one remote repository to another.
      *      <src> points to the source node and <dst> specifies the destination path,
      *      where the parent node must exist. Rcp processes the nodes by streaming the data.
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.quiet - prints as little as possible
      * @param {boolean} options.recursive - descends recursively
@@ -405,6 +432,7 @@ class FileVault {
      *      If executed within a vlt checkout, it uses the respective filter and host to configure the synchronization.
      *      If executed outside of a vlt checkout, it registers the current folder for synchronization only if the directory is empty.
      *
+     * @method
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.verbose - verbose output.
      * @param {boolean} options.force - force certain commands to execute
