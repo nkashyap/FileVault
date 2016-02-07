@@ -37,33 +37,35 @@ class FileVault {
      * @private
      * @param {string} command - vlt command name.
      * @param {object} options - command arguments parameter.
-     * @return {string} parameters.
+     * @return {Array} parameters.
      */
     parseOptions(cmd, opts) {
-        let params = ['vlt', cmd];
+        let params = [cmd];
         let options = Object.assign({}, this.options, opts);
 
-        if (options.Xjcrlog) params.push(`-Xjcrlog ${options.Xjcrlog}`);
-        if (options.Xdavex) params.push(`-Xdavex ${options.Xdavex}`);
-        if (options.config) params.push(`--config ${options.config}`);
-        if (options.logLevel) params.push(`--log-level ${options.logLevel}`);
-        if (options.type) params.push(`--type ${options.type}`);
+        if (options.Xjcrlog) params.push('-Xjcrlog', options.Xjcrlog);
+        if (options.Xdavex) params.push('-Xdavex', options.Xdavex);
+        if (options.config) params.push('--config', options.config);
+        if (options.logLevel) params.push('--log-level', options.logLevel);
+        if (options.type) params.push('--type', options.type);
         if (options.credentials) {
-            params.push(`--credentials ${options.credentials}`);
+            params.push('--credentials', options.credentials);
         } else if (options.username && options.password) {
-            params.push(`--credentials ${options.username}:${options.password}`);
+            params.push('--credentials', `${options.username}:${options.password}`);
         } else {
             throw new Error('Please provide credentials.');
         }
 
-        if (options.filter) params.push(`--filter ${options.filter}`);
-        if (options.linkFormat) params.push(`--linkFormat ${options.linkFormat}`);
-        if (options.settings) params.push(`--console-settings ${options.settings}`);
-        if (options.batchSize) params.push(`--batchSize ${options.batchSize}`);
-        if (options.throttle) params.push(`--throttle ${options.throttle}`);
-        if (cmd === 'sync' && options.uri) params.push(`--uri ${options.uri}`);
+        if (options.filter) params.push('--filter', options.filter);
+        if (options.linkFormat) params.push('--linkFormat', options.linkFormat);
+        if (options.settings) params.push('--console-settings', options.settings);
+        if (options.batchSize) params.push('--batchSize', options.batchSize);
+        if (options.throttle) params.push('--throttle', options.throttle);
+        if (cmd === 'sync' && options.uri) params.push('--uri', options.uri);
         if (options.exclude) {
-            params.push(`--exclude ${(Array.isArray(options.exclude) ? options.exclude.join(' ') : options.exclude)}`);
+            params.push('--exclude');
+            if (!Array.isArray(options.exclude)) options.exclude = [options.exclude];
+            params = params.concat(options.exclude);
         }
 
         if (options.recursive) params.push('--recursive');
@@ -89,13 +91,15 @@ class FileVault {
         if (options.dst) params.push(options.dst);
         if (options.jcrPath) params.push(options.jcrPath);
         if (options.localPath) {
-            params.push(Array.isArray(options.localPath) ? options.localPath.join(' ') : options.localPath);
+            if (!Array.isArray(options.localPath)) options.localPath = [options.localPath];
+            params = params.concat(options.localPath);
         }
         if (options.file) {
-            params.push(Array.isArray(options.file) ? options.file.join(' ') : options.file);
+            if (!Array.isArray(options.file)) options.file = [options.file];
+            params = params.concat(options.file);
         }
 
-        return params.join(' ');
+        return params;
     }
 
     /**
@@ -108,10 +112,24 @@ class FileVault {
      * @param {object} options - command arguments parameter.
      * @return {Promise} A Promise object.
      */
-    exec(command, options) {
+    spawn(command, options) {
         return (new Promise((resolve, reject) => {
-            this.cp.exec(this.parseOptions(command, options), (error, stdout, stderr) => {
-                return error !== null ? reject(stderr, error) : resolve(stdout);
+            let stdout = '', stderr = '';
+            let child = this.cp
+                .spawn('vlt', this.parseOptions(command, options))
+                .on('close', (code) => {
+                    resolve(stdout, code);
+                })
+                .on('error', (err) => {
+                    reject(stderr, err);
+                });
+
+            child.stdout.setEncoding('utf8');
+            child.stdout.on('data', (data) => {
+                stdout += data;
+            });
+            child.stderr.on('data', (data) => {
+                stderr += data;
             });
         }));
     }
@@ -132,7 +150,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     export(options) {
-        return this.exec('export', options);
+        return this.spawn('export', options);
     }
 
     /**
@@ -151,7 +169,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     import(options) {
-        return this.exec('import', options);
+        return this.spawn('import', options);
     }
 
     /**
@@ -173,7 +191,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     checkout(options) {
-        return this.exec('checkout', options);
+        return this.spawn('checkout', options);
     }
 
     /**
@@ -189,7 +207,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     analyze(options) {
-        return this.exec('analyze', options);
+        return this.spawn('analyze', options);
     }
 
     /**
@@ -208,7 +226,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     status(options) {
-        return this.exec('status', options);
+        return this.spawn('status', options);
     }
 
     /**
@@ -225,7 +243,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     update(options) {
-        return this.exec('update', options);
+        return this.spawn('update', options);
     }
 
     /**
@@ -241,7 +259,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     info(options) {
-        return this.exec('info', options);
+        return this.spawn('info', options);
     }
 
     /**
@@ -258,7 +276,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     commit(options) {
-        return this.exec('commit', options);
+        return this.spawn('commit', options);
     }
 
     /**
@@ -273,7 +291,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     revert(options) {
-        return this.exec('revert', options);
+        return this.spawn('revert', options);
     }
 
     /**
@@ -289,7 +307,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     resolved(options) {
-        return this.exec('resolved', options);
+        return this.spawn('resolved', options);
     }
 
     /**
@@ -305,7 +323,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     propget(options) {
-        return this.exec('propget', options);
+        return this.spawn('propget', options);
     }
 
     /**
@@ -320,7 +338,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     proplist(options) {
-        return this.exec('proplist', options);
+        return this.spawn('proplist', options);
     }
 
     /**
@@ -337,7 +355,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     propset(options) {
-        return this.exec('propset', options);
+        return this.spawn('propset', options);
     }
 
     /**
@@ -355,7 +373,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     add(options) {
-        return this.exec('add', options);
+        return this.spawn('add', options);
     }
 
     /**
@@ -371,7 +389,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     delete(options) {
-        return this.exec('delete', options);
+        return this.spawn('delete', options);
     }
 
     /**
@@ -385,7 +403,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     diff(options) {
-        return this.exec('diff', options);
+        return this.spawn('diff', options);
     }
 
     /**
@@ -398,7 +416,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     console(options) {
-        return this.exec('console', options);
+        return this.spawn('console', options);
     }
 
     /**
@@ -421,7 +439,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     rcp(options) {
-        return this.exec('rcp', options);
+        return this.spawn('rcp', options);
     }
 
     /**
@@ -442,7 +460,7 @@ class FileVault {
      * @return {Promise} A Promise object.
      */
     sync(options) {
-        return this.exec('sync', options);
+        return this.spawn('sync', options);
     }
 }
 

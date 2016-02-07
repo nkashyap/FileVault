@@ -27,7 +27,7 @@ describe('FileVault', () => {
                 uri: 'http://localhost:4502/crx',
                 jcrPath: '.',
                 localPath: '/'
-            }), 'vlt export --type platform --credentials admin:admin --prune-missing --verbose --version http://localhost:4502/crx . /');
+            }).join(' '), 'export --type platform --credentials admin:admin --prune-missing --verbose --version http://localhost:4502/crx . /');
         });
     });
 
@@ -39,7 +39,7 @@ describe('FileVault', () => {
                 uri: 'http://localhost:4502/crx',
                 jcrPath: '.',
                 localPath: '/'
-            }), 'vlt import --credentials admin:admin --sync --verbose --version http://localhost:4502/crx . /');
+            }).join(' '), 'import --credentials admin:admin --sync --verbose --version http://localhost:4502/crx . /');
         });
     });
 
@@ -53,7 +53,7 @@ describe('FileVault', () => {
                 uri: 'http://localhost:4502/crx',
                 jcrPath: '.',
                 localPath: '/'
-            }), 'vlt checkout --credentials admin:admin --filter /app/test.js --force --verbose --version http://localhost:4502/crx . /');
+            }).join(' '), 'checkout --credentials admin:admin --filter /app/test.js --force --verbose --version http://localhost:4502/crx . /');
         });
     });
 
@@ -64,7 +64,7 @@ describe('FileVault', () => {
                 quite: false,
                 linkFormat: 'CQ520_HF_%s|%s',
                 localPath: '/'
-            }), 'vlt analyze --credentials admin:admin --linkFormat CQ520_HF_%s|%s --verbose --version /');
+            }).join(' '), 'analyze --credentials admin:admin --linkFormat CQ520_HF_%s|%s --verbose --version /');
         });
     });
 
@@ -76,7 +76,7 @@ describe('FileVault', () => {
                 showUpdate: true,
                 nonRecursive: true,
                 file: '/test.js'
-            }), 'vlt status --credentials admin:admin --non-recursive --show-update --verbose --version /test.js');
+            }).join(' '), 'status --credentials admin:admin --non-recursive --show-update --verbose --version /test.js');
         });
     });
 
@@ -88,7 +88,7 @@ describe('FileVault', () => {
                 force: true,
                 nonRecursive: true,
                 file: ['/test.js']
-            }), 'vlt update --credentials admin:admin --non-recursive --force --verbose --version /test.js');
+            }).join(' '), 'update --credentials admin:admin --non-recursive --force --verbose --version /test.js');
         });
     });
 
@@ -100,7 +100,7 @@ describe('FileVault', () => {
                 force: true,
                 recursive: true,
                 file: ['/test.js']
-            }), 'vlt info --credentials admin:admin --recursive --force --verbose --version /test.js');
+            }).join(' '), 'info --credentials admin:admin --recursive --force --verbose --version /test.js');
         });
     });
 
@@ -112,7 +112,7 @@ describe('FileVault', () => {
                 force: true,
                 nonRecursive: true,
                 file: ['/test.js']
-            }), 'vlt commit --credentials admin:admin --non-recursive --force --verbose --version /test.js');
+            }).join(' '), 'commit --credentials admin:admin --non-recursive --force --verbose --version /test.js');
         });
     });
 
@@ -122,7 +122,7 @@ describe('FileVault', () => {
                 quite: false,
                 recursive: true,
                 file: ['/test.js']
-            }), 'vlt revert --credentials admin:admin --recursive --verbose --version /test.js');
+            }).join(' '), 'revert --credentials admin:admin --recursive --verbose --version /test.js');
         });
     });
 
@@ -133,7 +133,7 @@ describe('FileVault', () => {
                 force: true,
                 recursive: true,
                 file: ['/test.js']
-            }), 'vlt resolved --credentials admin:admin --recursive --force --verbose --version /test.js');
+            }).join(' '), 'resolved --credentials admin:admin --recursive --force --verbose --version /test.js');
         });
     });
 
@@ -144,7 +144,7 @@ describe('FileVault', () => {
                 recursive: true,
                 propname: 'name',
                 file: ['/test.js']
-            }), 'vlt propget --credentials admin:admin --recursive --verbose --version name /test.js');
+            }).join(' '), 'propget --credentials admin:admin --recursive --verbose --version name /test.js');
         });
     });
 
@@ -154,7 +154,7 @@ describe('FileVault', () => {
                 quite: false,
                 recursive: true,
                 file: ['/test.js']
-            }), 'vlt proplist --credentials admin:admin --recursive --verbose --version /test.js');
+            }).join(' '), 'proplist --credentials admin:admin --recursive --verbose --version /test.js');
         });
     });
 
@@ -166,7 +166,7 @@ describe('FileVault', () => {
                 propname: 'name',
                 propval: 'test',
                 file: ['/test.js']
-            }), 'vlt propset --credentials admin:admin --recursive --verbose --version name test /test.js');
+            }).join(' '), 'propset --credentials admin:admin --recursive --verbose --version name test /test.js');
         });
     });
 
@@ -178,7 +178,7 @@ describe('FileVault', () => {
                 force: true,
                 nonRecursive: true,
                 file: ['/test.js']
-            }), 'vlt add --credentials admin:admin --non-recursive --force --verbose --version /test.js');
+            }).join(' '), 'add --credentials admin:admin --non-recursive --force --verbose --version /test.js');
         });
     });
 
@@ -189,7 +189,7 @@ describe('FileVault', () => {
                 quite: false,
                 force: true,
                 file: ['/test.js']
-            }), 'vlt delete --credentials admin:admin --force --verbose --version /test.js');
+            }).join(' '), 'delete --credentials admin:admin --force --verbose --version /test.js');
         });
     });
 
@@ -198,7 +198,7 @@ describe('FileVault', () => {
             assert.equal(vault.parseOptions('diff', {
                 nonRecursive: true,
                 file: ['/test.js']
-            }), 'vlt diff --credentials admin:admin --non-recursive --verbose --version /test.js');
+            }).join(' '), 'diff --credentials admin:admin --non-recursive --verbose --version /test.js');
         });
     });
 
@@ -206,7 +206,7 @@ describe('FileVault', () => {
         it('should execute console command with correct arguments', () => {
             assert.equal(vault.parseOptions('console', {
                 settings: '/test.js'
-            }), 'vlt console --credentials admin:admin --console-settings /test.js --verbose --version');
+            }).join(' '), 'console --credentials admin:admin --console-settings /test.js --verbose --version');
         });
     });
 
@@ -222,7 +222,7 @@ describe('FileVault', () => {
                 exclude: 'css',
                 src: 'http://localhost:4502/crx/-/jcr:root/content',
                 dst: 'http://admin:admin@localhost:4503/crx/-/jcr:root/content_copy'
-            }), 'vlt rcp --credentials admin:admin --batchSize 100 --throttle 1 --exclude css --recursive --newer --update --verbose --version http://localhost:4502/crx/-/jcr:root/content http://admin:admin@localhost:4503/crx/-/jcr:root/content_copy');
+            }).join(' '), 'rcp --credentials admin:admin --batchSize 100 --throttle 1 --exclude css --recursive --newer --update --verbose --version http://localhost:4502/crx/-/jcr:root/content http://admin:admin@localhost:4503/crx/-/jcr:root/content_copy');
         });
     });
 
@@ -234,7 +234,7 @@ describe('FileVault', () => {
                 uri: 'http://localhost:4502',
                 command: 'install',
                 localPath: '/'
-            }), 'vlt sync --credentials admin:admin --uri http://localhost:4502 --force --verbose --version install /');
+            }).join(' '), 'sync --credentials admin:admin --uri http://localhost:4502 --force --verbose --version install /');
         });
     });
 });
