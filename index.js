@@ -114,22 +114,21 @@ class FileVault {
      */
     spawn(command, options) {
         return (new Promise((resolve, reject) => {
-            let stdout = '', stderr = '';
             let child = this.cp
                 .spawn('vlt', this.parseOptions(command, options))
                 .on('close', (code) => {
-                    resolve(stdout, code);
+                    resolve(code);
                 })
-                .on('error', (err) => {
-                    reject(stderr, err);
+                .on('error', (error) => {
+                    reject(error);
                 });
 
             child.stdout.setEncoding('utf8');
             child.stdout.on('data', (data) => {
-                stdout += data;
+                console.log(data);
             });
             child.stderr.on('data', (data) => {
-                stderr += data;
+                console.warn(data);
             });
         }));
     }
