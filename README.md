@@ -31,9 +31,11 @@ devServer
         jcrPath: '.',
         localPath: '/'
     })
-    .then((response, error)=>{
+    .then((code)=>{
     
     })
+    .catch((error)=>{
+    });
 ```
 
 [Adobe Experience Manager]: <https://docs.adobe.com/docs/en/crx/2-3/how_to/how_to_use_the_vlttool.html>
