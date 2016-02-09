@@ -4,7 +4,7 @@
   "description": "Apache Jackrabbit FileVault/Adobe CQ VLT node integration",
   "main": "index.js",
   "scripts": {
-    "prepublish": "./node_modules/.bin/jsdoc -c ./conf.json -t ./node_modules/ink-docstrap/template -R README.md -r ./index.js",
+    "prepublish": "./node_modules/.bin/jsdoc -d ./docs -c ./conf.json -t ./node_modules/ink-docstrap/template -R README.md -r ./index.js",
     "lint": "eslint index.js test.js",
     "pretest": "npm run lint",
     "test": "mocha --reporter spec",

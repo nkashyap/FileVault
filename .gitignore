@@ -4,6 +4,6 @@
 /vault-cli-2.4.34
 /node_modules
 /npm-debug.log
+/docs
 /coverage
-/out
 .idea
