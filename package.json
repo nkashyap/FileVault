@@ -14,11 +14,7 @@
     "VLT",
     "FileVault",
     "CQ5",
-    "JCR",
-    "repository",
-    "to",
-    "filesystem",
-    "mapping"
+    "jcr_root"
   ],
   "author": {
     "name": "Nisheeth Kashyap",
@@ -28,8 +24,12 @@
     "type": "git",
     "url": "git://github.com/nkashyap/FileVault.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/nkashyap/FileVault/issues"
+  },
+  "homepage": "https://github.com/nkashyap/FileVault#readme",
   "devDependencies": {
     "eslint": "^1.10.3",
     "ink-docstrap": "^1.1.1",
