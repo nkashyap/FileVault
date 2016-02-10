@@ -40,7 +40,7 @@ class FileVault {
      * @return {Array} parameters.
      */
     parseOptions(cmd, opts) {
-        let params = [cmd];
+        let params = [];
         let options = Object.assign({}, this.options, opts);
 
         if (options.Xjcrlog) params.push('-Xjcrlog', options.Xjcrlog);
@@ -55,6 +55,8 @@ class FileVault {
         } else {
             throw new Error('Please provide credentials.');
         }
+
+        params.push(cmd);
 
         if (options.filter) params.push('--filter', options.filter);
         if (options.linkFormat) params.push('--linkFormat', options.linkFormat);
@@ -115,7 +117,7 @@ class FileVault {
     spawn(command, options) {
         return (new Promise((resolve, reject) => {
             let child = this.cp
-                .spawn('vlt', this.parseOptions(command, options))
+                .spawn('vlt', this.parseOptions(command, options), options.process || {})
                 .on('close', (code) => {
                     resolve(code);
                 })
@@ -146,6 +148,7 @@ class FileVault {
      * @param {string} options.uri - mountpoint uri.
      * @param {string} options.jcrPath - JCR path.
      * @param {string} options.localPath - local path.
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     export(options) {
@@ -165,6 +168,7 @@ class FileVault {
      * @param {string} options.uri - mountpoint uri.
      * @param {string} options.jcrPath - JCR path.
      * @param {string} options.localPath - local path.
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     import(options) {
@@ -187,6 +191,7 @@ class FileVault {
      * @param {string} options.uri - mountpoint uri.
      * @param {string} options.jcrPath - JCR path.
      * @param {string} options.localPath - local path.
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     checkout(options) {
@@ -203,6 +208,7 @@ class FileVault {
      * @param {boolean} options.quiet - prints as little as possible.
      * @param {string} options.linkFormat - <format> printf format for hotfix links (name,id), for example [CQ520_HF_%s|%s]
      * @param {array} options.localPath - local path.
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     analyze(options) {
@@ -222,6 +228,7 @@ class FileVault {
      * @param {boolean} options.showUpdate - displays update information
      * @param {boolean} options.nonRecursive - operates on a single directory
      * @param {array} options.file - file or directory to display the status
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     status(options) {
@@ -239,6 +246,7 @@ class FileVault {
      * @param {boolean} options.force - forces the overwrite of local files
      * @param {boolean} options.nonRecursive - operates on a single directory
      * @param {array} options.file - file or directory to update
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     update(options) {
@@ -255,6 +263,7 @@ class FileVault {
      * @param {boolean} options.quiet - prints as little as possible.
      * @param {boolean} options.recursive - operates recursive
      * @param {array} options.file - file or directory to update
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     info(options) {
@@ -272,6 +281,7 @@ class FileVault {
      * @param {boolean} options.force - forces committing even if the remote copy is modified
      * @param {boolean} options.nonRecursive - operates on a single directory
      * @param {array} options.file - file or directory to update
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     commit(options) {
@@ -287,6 +297,7 @@ class FileVault {
      * @param {boolean} options.quiet - prints as little as possible.
      * @param {boolean} options.recursive - descends recursively
      * @param {array} options.file - file or directory to update
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     revert(options) {
@@ -303,6 +314,7 @@ class FileVault {
      * @param {boolean} options.quiet - prints as little as possible
      * @param {boolean} options.recursive - descends recursively
      * @param {array} options.file - file or directory to update
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     resolved(options) {
@@ -319,6 +331,7 @@ class FileVault {
      * @param {boolean} options.recursive - descends recursively
      * @param {string} options.propname - the property name
      * @param {array} options.file - file or directory to get the property from
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     propget(options) {
@@ -334,6 +347,7 @@ class FileVault {
      * @param {boolean} options.quiet - prints as little as possible
      * @param {boolean} options.recursive - descends recursively
      * @param {array} options.file - file or directory to list the properties from
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     proplist(options) {
@@ -351,6 +365,7 @@ class FileVault {
      * @param {string} options.propname - the property name
      * @param {string} options.propval - the property value
      * @param {array} options.file - file or directory to set the property to
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     propset(options) {
@@ -369,6 +384,7 @@ class FileVault {
      * @param {boolean} options.quiet - prints as little as possible
      * @param {boolean} options.nonRecursive - operates on a single directory
      * @param {array} options.file - local file or directory to add
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     add(options) {
@@ -385,6 +401,7 @@ class FileVault {
      * @param {boolean} options.force - forces the operation to run
      * @param {boolean} options.quiet - prints as little as possible
      * @param {array} options.file - local file or directory to add
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     delete(options) {
@@ -399,6 +416,7 @@ class FileVault {
      * @param {object} options - command arguments parameter.
      * @param {boolean} options.nonRecursive - operates on a single directory
      * @param {array} options.file - local file or directory to add
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     diff(options) {
@@ -412,6 +430,7 @@ class FileVault {
      * @method
      * @param {object} options - command arguments parameter.
      * @param {string} options.settings - specifies the console settings file. The default file is console.properties.
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     console(options) {
@@ -435,6 +454,7 @@ class FileVault {
      * @param {string} options.exclude - Regexp of excluded source paths.
      * @param {string} options.src - The repository address of the source tree.
      * @param {string} options.dst - The repository address of the destination node.
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     rcp(options) {
@@ -456,6 +476,7 @@ class FileVault {
      * @param {string} options.uri - <uri> specifies the URI of the sync host.
      * @param {string} options.command - sync command to execute.
      * @param {string} options.localPath - local path.
+     * @param {object} options.process - child process options.
      * @return {Promise} A Promise object.
      */
     sync(options) {
