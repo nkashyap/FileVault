@@ -47,7 +47,6 @@ class FileVault {
         if (options.Xdavex) params.push('-Xdavex', options.Xdavex);
         if (options.config) params.push('--config', options.config);
         if (options.logLevel) params.push('--log-level', options.logLevel);
-        if (options.type) params.push('--type', options.type);
         if (options.credentials) {
             params.push('--credentials', options.credentials);
         } else if (options.username && options.password) {
@@ -58,6 +57,7 @@ class FileVault {
 
         params.push(cmd);
 
+        if (options.type) params.push('--type', options.type);
         if (options.filter) params.push('--filter', options.filter);
         if (options.linkFormat) params.push('--linkFormat', options.linkFormat);
         if (options.settings) params.push('--console-settings', options.settings);
