@@ -85,17 +85,19 @@ class FileVault {
 
         if (options.version) params.push('--version');
 
-        if (options.command) params.push(options.command);
         if (options.propname) params.push(options.propname);
         if (options.propval) params.push(options.propval);
         if (cmd !== 'sync' && options.uri) params.push(options.uri);
         if (options.src) params.push(options.src);
         if (options.dst) params.push(options.dst);
-        if (options.jcrPath) params.push(options.jcrPath);
+
+        if (cmd !== 'import' && options.jcrPath) params.push(options.jcrPath);
+        if (options.command) params.push(options.command);
         if (options.localPath) {
             if (!Array.isArray(options.localPath)) options.localPath = [options.localPath];
             params = params.concat(options.localPath);
         }
+        if (cmd === 'import' && options.jcrPath) params.push(options.jcrPath);
         if (options.file) {
             if (!Array.isArray(options.file)) options.file = [options.file];
             params = params.concat(options.file);

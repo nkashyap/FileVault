@@ -38,5 +38,6 @@ devServer
     });
 ```
 
-[Adobe Experience Manager]: <https://docs.adobe.com/docs/en/crx/2-3/how_to/how_to_use_the_vlttool.html>
+[VLT options]: <https://docs.adobe.com/docs/en/crx/2-3/how_to/how_to_use_the_vlttool.html>
+[Adobe Experience Manager]: <https://www.adobeaemcloud.com/content/companies/public/adobe/filevault/filevault.html>
 [JackRabbit FileFault]: <http://jackrabbit.apache.org/filevault/index.html>
