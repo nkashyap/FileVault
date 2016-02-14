@@ -37,8 +37,8 @@ describe('FileVault', () => {
                 verbose: true,
                 sync: true,
                 uri: 'http://localhost:4502/crx',
-                jcrPath: '.',
-                localPath: '/'
+                jcrPath: '/',
+                localPath: '.'
             }).join(' '), '--credentials admin:admin import --sync --verbose --version http://localhost:4502/crx . /');
         });
     });

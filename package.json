@@ -1,6 +1,6 @@
 {
   "name": "filevault",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Apache Jackrabbit FileVault/Adobe CQ VLT node integration",
   "main": "index.js",
   "scripts": {
